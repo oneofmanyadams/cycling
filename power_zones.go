@@ -7,3 +7,7 @@ type PowerZone struct {
 	MinWatts    int
 	MaxWatts    int
 }
+
+func (s *PowerZone) AvgWatts() int {
+	return (s.MaxWatts + s.MinWatts) / 2
+}
