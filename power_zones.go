@@ -18,7 +18,7 @@ type PowerZones struct {
 
 func (s *PowerZones) DisplayZones() {
 	for _, zone := range s.Zones {
-		fmt.Printf("Zone #%d\n", zone.Number)
-		fmt.Printf("%s\n", zone.Name)
+		fmt.Printf("Zone: #%d\n", zone.Number)
+		fmt.Printf("Name: %s\n", zone.Name)
 	}
 }
