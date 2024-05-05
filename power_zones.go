@@ -7,3 +7,7 @@ type PowerZone struct {
 	MinWatts    int
 	MaxWatts    int
 }
+
+type PowerZones struct {
+	Zones []PowerZone
+}
