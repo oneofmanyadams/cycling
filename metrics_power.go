@@ -11,6 +11,7 @@ type TrainingStressScore struct {
 	NP   NormalizedPower
 	IP   IntensityFactor
 	FTP  FunctionalThresholdPower
+	// (Time*NP*IF) / (FTP * 3600) * 100
 }
 
 type NormalizedPower struct {
@@ -29,4 +30,5 @@ type IntensityFactor struct {
 
 type FunctionalThresholdPower struct {
 	// Maximum average power for 1hr
+	// Or Maximum average power for 20mins * .95
 }
