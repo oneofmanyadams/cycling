@@ -14,3 +14,4 @@ package cycling
 // Metrics details
 // https://www.wahoofitness.com/blog/numbers-understanding-metrics-matter/
 // https://help.trainingpeaks.com/hc/en-us/articles/230904648-Suggested-Weekly-TSS-and-Target-CTL
+// https://www.trainerroad.com/blog/normalized-power-what-it-is-and-how-to-use-it/
