@@ -14,7 +14,7 @@ type Session struct {
 // Standard FTP calculation is avg power of a 20min max-effort session * 0.95.
 func (s *Session) FunctionalThresholdPower() int {
 	if s.FTP == 0 {
-		s.FTP = int(findHighestChunkAverage(1200, s.PowerEachSec))
+		s.FTP = int(findHighestChunkAverage(1200, s.PowerEachSec) * 0.95)
 	}
 	return s.FTP
 }
