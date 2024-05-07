@@ -7,3 +7,6 @@ package cycling
 
 // Zone details:
 // https://www.trainingpeaks.com/blog/power-training-levels/
+
+// Details on training adaptations
+// https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5983157/
