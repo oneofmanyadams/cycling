@@ -1,5 +1,13 @@
 package cycling
 
+// --ToDo
+// -- Finish NormalizedPower function
+// -- Test with real data and compare to app results.
+
+import (
+	"math"
+)
+
 type Session struct {
 	Time         int // in seconds
 	PowerEachSec []int
@@ -58,18 +66,31 @@ func (s *Session) TrainingStressScore() float64 {
 }
 
 // Helper functions
+func TCR(cl int, v []int) []int {
+	return calcRollingAverage(cl, v)
+}
 func calcRollingAverage(chunk_len int, values []int) []int {
-	if len(values) < chunk_len {
-		return []int{}
+	var averages_slice []int
+	for k := range values {
+		chunk_start := k - chunk_len
+		if k < chunk_len {
+			chunk_start = 0
+		}
+		chunk_sum := sumIntSlice(values[chunk_start:k])
+		chunk_average := math.Round(float64(chunk_sum) / float64(chunk_len))
+		averages_slice = append(averages_slice, int(chunk_average))
 	}
-	// rolling average logic here.
-	return []int{}
+	return averages_slice
 }
 
 func findHighestChunkAverage(chunk_len int, values []int) float64 {
 	var largest float64
 	for k := range values {
 		var calc_val float64
+		// Is this actually a bug?
+		// For slices with len less than chunk_len should
+		// we still calc the average based on chunk_len?
+		// (instead of sub slice len which is what this is doing?)
 		if k < chunk_len {
 			calc_val = avgIntSlice(values[0:k])
 		} else {
@@ -79,17 +100,17 @@ func findHighestChunkAverage(chunk_len int, values []int) float64 {
 			largest = calc_val
 		}
 	}
-	// Do a rolling sum of current val plus prev chunklen_records.
-	// Record whatever the largest value is.
-	// return largest_val/chunk_len
-
 	return largest
 }
 
 func avgIntSlice(values []int) float64 {
+	return float64(sumIntSlice(values)) / float64(len(values))
+}
+
+func sumIntSlice(values []int) int {
 	var sum int
 	for _, v := range values {
 		sum = sum + v
 	}
-	return float64(sum) / float64(len(values))
+	return sum
 }
