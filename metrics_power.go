@@ -5,6 +5,7 @@ package cycling
 // -- Test with real data and compare to app results.
 
 import (
+	"fmt"
 	"math"
 )
 
@@ -36,7 +37,17 @@ func (s *Session) FunctionalThresholdPower() int {
 // --Calculate 4th root of that average.
 func (s *Session) NormalizedPower() int {
 	if s.NP == 0 {
-		return s.NP
+		rolling_avgs := calcRollingAverage(30, s.PowerEachSec)
+		var raised_avgs []int
+		for _, v := range rolling_avgs {
+			raised_avgs = append(raised_avgs, int(math.Pow(float64(v), 4)))
+		}
+		// this won't work, numbers are too big.
+		// likely need to sum using math/big package and then implement
+		// own 4 root function.
+		// Try using int64 first? or even uint64?
+		avg_of_raised := avgIntSlice(raised_avgs)
+		s.NP = int(math.Pow(avg_of_raised, 1/4))
 	}
 	return s.NP
 }
@@ -66,9 +77,6 @@ func (s *Session) TrainingStressScore() float64 {
 }
 
 // Helper functions
-func TCR(cl int, v []int) []int {
-	return calcRollingAverage(cl, v)
-}
 func calcRollingAverage(chunk_len int, values []int) []int {
 	var averages_slice []int
 	for k := range values {
