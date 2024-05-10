@@ -42,7 +42,7 @@ func (s *Session) NormalizedPower() int {
 			raised_avgs = append(raised_avgs, int(math.Pow(float64(v), 4)))
 		}
 		avg_of_raised := avgIntSlice(raised_avgs)
-		s.NP = int(math.Pow(avg_of_raised, 1.0/4.0))
+		s.NP = int(math.Round(math.Pow(avg_of_raised, 1.0/4.0)))
 	}
 	return s.NP
 }
