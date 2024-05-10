@@ -102,7 +102,7 @@ func findHighestChunkAverage(chunk_len int, values []int) float64 {
 		// we still calc the average based on chunk_len?
 		// (instead of sub slice len which is what this is doing?)
 		if k < chunk_len {
-			calc_val = avgIntSlice(values[0:k])
+			calc_val = float64(sumIntSlice(values[0:k])) / float64(chunk_len)
 		} else {
 			calc_val = avgIntSlice(values[k-chunk_len : k])
 		}
