@@ -17,6 +17,13 @@ type Session struct {
 	TSS          float64
 }
 
+func (s *Session) CalculatedTime() int {
+	if s.Time == 0 {
+		s.Time = len(s.PowerEachSec)
+	}
+	return s.Time
+}
+
 // FunctionalThresholdPower is the estimated maximum avg power achievable for 1 hr.
 // This is a rough analogy to Lactate Threshold that can be measured outside of a lab.
 // Standard FTP calculation is avg power of a 20min max-effort session * 0.95.
@@ -62,7 +69,7 @@ func (s *Session) IntensityFactor() float64 {
 // The formula is (Time*NP*IF) / (FTP * 3600) * 100
 func (s *Session) TrainingStressScore() float64 {
 	if s.TSS == 0 {
-		effort_given := float64(s.Time) *
+		effort_given := float64(s.CalculatedTime()) *
 			float64(s.NormalizedPower()) *
 			s.IntensityFactor()
 		baseline_effort := float64(s.FunctionalThresholdPower()) * 3600
