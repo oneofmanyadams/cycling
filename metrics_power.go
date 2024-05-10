@@ -1,9 +1,5 @@
 package cycling
 
-// --ToDo
-// -- Finish NormalizedPower function
-// -- Test with real data and compare to app results.
-
 import (
 	"math"
 )
@@ -12,10 +8,58 @@ type Session struct {
 	Time         int // in seconds
 	PowerEachSec []int
 	FTP          int
+	AP           int
 	NP           int
 	IF           float64
 	TSS          float64
 }
+
+///////////////////////////////////////////////////////////////////////////////
+// Helper functions
+
+// largestSubsetAvg finds the average of the largest sub-slice of size chunk_len in slice values.
+func largestSubsetAvg(values []int, size int) float64 {
+	return avgInts(largestSub(values, size), size)
+}
+
+// largestSub returns the largest sub-slice of len size in the provided int slice.
+func largestSub(ints []int, size int) (largest []int) {
+	var sum int
+	for sub_end := range ints {
+		sub_start := sub_end - size
+		if sub_start < 0 {
+			sub_start = 0
+		}
+		sub := ints[sub_start:sub_end]
+		sub_sum := sumInts(sub)
+		if sub_sum > sum {
+			sum = sub_sum
+			largest = sub
+		}
+	}
+	return largest
+}
+
+// avgInts allows a min_denominator, which makes it a little easier to do moving avgs
+func avgInts(ints []int, min_denominator int) float64 {
+	if len(ints) > min_denominator {
+		min_denominator = len(ints)
+	}
+	if min_denominator == 0 {
+		return 0.0
+	}
+	return float64(sumInts(ints)) / float64(min_denominator)
+}
+
+func sumInts(ints []int) (sum int) {
+	for _, v := range ints {
+		sum = sum + v
+	}
+	return sum
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Deprecated functions below here
 
 func (s *Session) CalculatedTime() int {
 	if s.Time == 0 {
@@ -29,7 +73,7 @@ func (s *Session) CalculatedTime() int {
 // Standard FTP calculation is avg power of a 20min max-effort session * 0.95.
 func (s *Session) FunctionalThresholdPower() int {
 	if s.FTP == 0 {
-		s.FTP = int(findHighestChunkAverage(1200, s.PowerEachSec) * 0.95)
+		s.FTP = int(largestSubsetAvg(s.PowerEachSec, 1200) * 0.95)
 	}
 	return s.FTP
 }
@@ -48,7 +92,7 @@ func (s *Session) NormalizedPower() int {
 		for _, v := range rolling_avgs {
 			raised_avgs = append(raised_avgs, int(math.Pow(float64(v), 4)))
 		}
-		avg_of_raised := avgIntSlice(raised_avgs)
+		avg_of_raised := avgInts(raised_avgs, 0)
 		s.NP = int(math.Round(math.Pow(avg_of_raised, 1.0/4.0)))
 	}
 	return s.NP
@@ -86,13 +130,15 @@ func calcRollingAverage(chunk_len int, values []int) []int {
 		if k < chunk_len {
 			chunk_start = 0
 		}
-		chunk_sum := sumIntSlice(values[chunk_start:k])
+		chunk_sum := sumInts(values[chunk_start:k])
 		chunk_average := math.Round(float64(chunk_sum) / float64(chunk_len))
 		averages_slice = append(averages_slice, int(chunk_average))
 	}
 	return averages_slice
 }
 
+// DONE
+/*
 func findHighestChunkAverage(chunk_len int, values []int) float64 {
 	var largest float64
 	for k := range values {
@@ -124,3 +170,4 @@ func sumIntSlice(values []int) int {
 	}
 	return sum
 }
+*/
