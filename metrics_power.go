@@ -5,7 +5,6 @@ package cycling
 // -- Test with real data and compare to app results.
 
 import (
-	"fmt"
 	"math"
 )
 
@@ -42,12 +41,8 @@ func (s *Session) NormalizedPower() int {
 		for _, v := range rolling_avgs {
 			raised_avgs = append(raised_avgs, int(math.Pow(float64(v), 4)))
 		}
-		// this won't work, numbers are too big.
-		// likely need to sum using math/big package and then implement
-		// own 4 root function.
-		// Try using int64 first? or even uint64?
 		avg_of_raised := avgIntSlice(raised_avgs)
-		s.NP = int(math.Pow(avg_of_raised, 1/4))
+		s.NP = int(math.Pow(avg_of_raised, 1.0/4.0))
 	}
 	return s.NP
 }
