@@ -25,6 +25,10 @@ func (s *Session) FunctionalThresholdPower() {
 	s.FTP = int(largestSubsetAvg(s.PowerEachSec, 1200) * 0.95)
 }
 
+func (s *Session) AveragePower() {
+	s.AP = int(avgInts(s.PowerEachSec))
+}
+
 // NormalizedPower is a weighted average of power for a Session.
 // It places more weight on higher power efforts.
 // Steps to calculate are:
