@@ -14,6 +14,17 @@ type Session struct {
 	TSS          float64
 }
 
+func (s *Session) CalculateMetrics() {
+	s.SessionTime()
+	if s.FTP <= 0 {
+		s.FunctionalThresholdPower()
+	}
+	s.AveragePower()
+	s.NormalizedPower()
+	s.IntensityFactor()
+	s.TrainingStressScore()
+}
+
 func (s *Session) SessionTime() {
 	s.Time = len(s.PowerEachSec)
 }
