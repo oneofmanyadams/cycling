@@ -25,6 +25,10 @@ func (s *HeartRateMetrics) CalculateMetrics() {
 		s.FunctionalThresholdHeartRate()
 	}
 	s.AverageHeartRate()
+	s.NormalizedHeartRate()
+	s.VariabilityIndex()
+	s.IntensityFactor()
+	s.TrainingStressScore()
 }
 
 func (s *HeartRateMetrics) SessionTime() {
@@ -39,4 +43,13 @@ func (s *HeartRateMetrics) FunctionalThresholdHeartRate() {
 
 func (s *HeartRateMetrics) AverageHeartRate() {
 	s.AHR = int(avgInts(s.HeartRateEachSec))
+}
+
+func (s *HeartRateMetrics) NormalizedHeartRate() {
+}
+func (s *HeartRateMetrics) VariabilityIndex() {
+}
+func (s *HeartRateMetrics) IntensityFactor() {
+}
+func (s *HeartRateMetrics) TrainingStressScore() {
 }
