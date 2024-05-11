@@ -1,5 +1,7 @@
 package cycling
 
+import "math"
+
 type HeartRateMetrics struct {
 	HeartRateEachSec []int
 	Time             int     // in seconds
@@ -46,10 +48,25 @@ func (s *HeartRateMetrics) AverageHeartRate() {
 }
 
 func (s *HeartRateMetrics) NormalizedHeartRate() {
+	moving_avgs := movingAverageInts(s.HeartRateEachSec, 30)
+	var raised_avgs []int
+	for _, v := range moving_avgs {
+		raised_avgs = append(raised_avgs, int(math.Pow(float64(v), 4)))
+	}
+	avg_of_raised := avgInts(raised_avgs)
+	s.NHR = int(math.Round(math.Pow(avg_of_raised, 1.0/4.0)))
 }
+
 func (s *HeartRateMetrics) VariabilityIndex() {
+	s.VI = float64(s.NHR) / float64(s.AHR)
 }
+
 func (s *HeartRateMetrics) IntensityFactor() {
+	s.IF = float64(s.NHR) / float64(s.FTHR)
 }
+
 func (s *HeartRateMetrics) TrainingStressScore() {
+	effort_given := float64(s.Time) * float64(s.NHR) * s.IF
+	baselines_effort := float64(s.FTHR) * 3600
+	s.TSS = effort_given / baselines_effort * 100.00
 }
