@@ -6,13 +6,13 @@ import (
 
 type PowerMetrics struct {
 	PowerEachSec []int
-	Time         int // in seconds
-	FTP          int
-	AP           int
-	NP           int
-	VI           float64
-	IF           float64
-	TSS          float64
+	Time         int     // in seconds
+	FTP          int     // FunctionalThresholdPower
+	AP           int     // AveragePower
+	NP           int     // NormalizedPower
+	VI           float64 // VariabilityIndex
+	IF           float64 // IntensityFactor
+	TSS          float64 // TrainingStressScore
 }
 
 func NewPowerMetrics(ftp int, power_each_second []int) PowerMetrics {
