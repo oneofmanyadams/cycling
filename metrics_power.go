@@ -4,7 +4,7 @@ import (
 	"math"
 )
 
-type Session struct {
+type PowerMetrics struct {
 	Time         int // in seconds
 	PowerEachSec []int
 	FTP          int
@@ -15,7 +15,7 @@ type Session struct {
 	TSS          float64
 }
 
-func (s *Session) CalculateMetrics() {
+func (s *PowerMetrics) CalculateMetrics() {
 	s.SessionTime()
 	if s.FTP <= 0 {
 		s.FunctionalThresholdPower()
@@ -27,18 +27,18 @@ func (s *Session) CalculateMetrics() {
 	s.TrainingStressScore()
 }
 
-func (s *Session) SessionTime() {
+func (s *PowerMetrics) SessionTime() {
 	s.Time = len(s.PowerEachSec)
 }
 
 // FunctionalThresholdPower is the estimated maximum avg power achievable for 1 hr.
 // This is a rough analogy to Lactate Threshold that can be measured outside of a lab.
 // Standard FTP calculation is (avg power of a 20min max-effort session) * 0.95.
-func (s *Session) FunctionalThresholdPower() {
+func (s *PowerMetrics) FunctionalThresholdPower() {
 	s.FTP = int(largestSubsetAvg(s.PowerEachSec, 1200) * 0.95)
 }
 
-func (s *Session) AveragePower() {
+func (s *PowerMetrics) AveragePower() {
 	s.AP = int(avgInts(s.PowerEachSec))
 }
 
@@ -49,7 +49,7 @@ func (s *Session) AveragePower() {
 // --Raise the reuslting values to the forth power.
 // --Determine the average of those ^4 raised values.
 // --Calculate 4th root of that average.
-func (s *Session) NormalizedPower() {
+func (s *PowerMetrics) NormalizedPower() {
 	rolling_avgs := movingAverageInts(s.PowerEachSec, 30)
 	var raised_avgs []int
 	for _, v := range rolling_avgs {
@@ -60,20 +60,20 @@ func (s *Session) NormalizedPower() {
 }
 
 // VariabilityIndex measure how smooth power output was during a ride.
-func (s *Session) VariabilityIndex() {
+func (s *PowerMetrics) VariabilityIndex() {
 	s.VI = float64(s.NP) / float64(s.AP)
 }
 
 // IntensityFactor is the ratio of NormalizedPower to FunctionalThresholdPower.
 // Used to determine how difficult a session was relative to a rider's capability.
-func (s *Session) IntensityFactor() {
+func (s *PowerMetrics) IntensityFactor() {
 	s.IF = float64(s.NP) / float64(s.FTP)
 }
 
 // TrainingStressScore is a measurement of how taxing a session was.
 // This factors in the length of the session as well as the intensity.
 // The formula is (Time*NP*IF) / (FTP * 3600) * 100
-func (s *Session) TrainingStressScore() {
+func (s *PowerMetrics) TrainingStressScore() {
 	effort_given := float64(s.Time) * float64(s.NP) * s.IF
 	baseline_effort := float64(s.FTP) * 3600
 	s.TSS = effort_given / baseline_effort * 100.00
