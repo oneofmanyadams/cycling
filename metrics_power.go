@@ -5,14 +5,22 @@ import (
 )
 
 type PowerMetrics struct {
-	Time         int // in seconds
 	PowerEachSec []int
+	Time         int // in seconds
 	FTP          int
 	AP           int
 	NP           int
 	VI           float64
 	IF           float64
 	TSS          float64
+}
+
+func NewPowerMetrics(ftp int, power_each_second []int) PowerMetrics {
+	var pm PowerMetrics
+	pm.FTP = ftp
+	pm.PowerEachSec = power_each_second
+	pm.CalculateMetrics()
+	return pm
 }
 
 func (s *PowerMetrics) CalculateMetrics() {
