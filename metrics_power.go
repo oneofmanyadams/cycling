@@ -10,6 +10,7 @@ type Session struct {
 	FTP          int
 	AP           int
 	NP           int
+	VI           float64
 	IF           float64
 	TSS          float64
 }
@@ -21,6 +22,7 @@ func (s *Session) CalculateMetrics() {
 	}
 	s.AveragePower()
 	s.NormalizedPower()
+	s.VariabilityIndex()
 	s.IntensityFactor()
 	s.TrainingStressScore()
 }
@@ -55,6 +57,11 @@ func (s *Session) NormalizedPower() {
 	}
 	avg_of_raised := avgInts(raised_avgs)
 	s.NP = int(math.Round(math.Pow(avg_of_raised, 1.0/4.0)))
+}
+
+// VariabilityIndex measure how smooth power output was during a ride.
+func (s *Session) VariabilityIndex() {
+	s.VI = float64(s.NP) / float64(s.AP)
 }
 
 // IntensityFactor is the ratio of NormalizedPower to FunctionalThresholdPower.
