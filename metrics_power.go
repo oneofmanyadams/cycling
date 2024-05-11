@@ -20,15 +20,15 @@ func (s *Session) SessionTime() {
 
 // FunctionalThresholdPower is the estimated maximum avg power achievable for 1 hr.
 // This is a rough analogy to Lactate Threshold that can be measured outside of a lab.
-// Standard FTP calculation is avg power of a 20min max-effort session * 0.95.
+// Standard FTP calculation is (avg power of a 20min max-effort session) * 0.95.
 func (s *Session) FunctionalThresholdPower() {
 	s.FTP = int(largestSubsetAvg(s.PowerEachSec, 1200) * 0.95)
 }
 
-// NormalizedPower is a rolling weighted average for power for a Session.
-// It essentially gives more credit for efforts done above FTP.
+// NormalizedPower is a weighted average of power for a Session.
+// It places more weight on higher power efforts.
 // Steps to calculate are:
-// --Calculate rolling 30 second average power for workout.
+// --Calculate 30 second moving average power for workout.
 // --Raise the reuslting values to the forth power.
 // --Determine the average of those ^4 raised values.
 // --Calculate 4th root of that average.
