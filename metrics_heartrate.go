@@ -18,9 +18,9 @@ type HeartRateMetrics struct {
 }
 
 // NewHeartRateMetrics is the prefered method of creating a HeartRateMetrics type.
-// fthr should be set to the rider's know Functional Threshold Heart Rate.
+// fthr should be set to the rider's known Functional Threshold Heart Rate.
 // If fthr is not known, then 0 can be passed and FTHR will be calculated based on
-// the best 20min effert in the provided hr_each_second.
+// the best 20min effort in the provided hr_each_second.
 func NewHeartRateMetrics(fthr int, hr_each_second []int) HeartRateMetrics {
 	var hrm HeartRateMetrics
 	hrm.FTHR = fthr
@@ -31,7 +31,7 @@ func NewHeartRateMetrics(fthr int, hr_each_second []int) HeartRateMetrics {
 
 // CalculateMetrics runs all metrics caluclating methods in the correct
 // order they need to be called in to correctly populate a HeartRateMetrics.
-// FunctionalThresholdHeartRate is not called if it is already set (> 0).
+// FunctionalThresholdHeartRate is not called if it is already set (>0).
 func (s *HeartRateMetrics) CalculateMetrics() {
 	s.SessionTime()
 	if s.FTHR <= 0 {
@@ -44,7 +44,7 @@ func (s *HeartRateMetrics) CalculateMetrics() {
 	s.TrainingStressScore()
 }
 
-// SessionTime calculates Time based on total number of seconds in HeartRateEachSec.
+// SessionTime calculates Time based on total number of elements in HeartRateEachSec.
 func (s *HeartRateMetrics) SessionTime() {
 	s.Time = len(s.HeartRateEachSec)
 }
@@ -61,8 +61,8 @@ func (s *HeartRateMetrics) AverageHeartRate() {
 }
 
 // NormalizedHeartRate is a weighted average of HeartRateEachSec, intended to
-// weigh higher intensity efforts for heavily.
-// Details on the exact calculation can be found on the NormalizedPower method.
+// give more weight to higher intensity efforts.
+// Details on calculation can be found on the NormalizedPower method of PowerMetrics.
 func (s *HeartRateMetrics) NormalizedHeartRate() {
 	moving_avgs := movingAverageInts(s.HeartRateEachSec, 30)
 	var raised_avgs []int
@@ -74,7 +74,7 @@ func (s *HeartRateMetrics) NormalizedHeartRate() {
 }
 
 // VariabilityIndex is the ratio of NormalizedHeartRate to AverageHeartRate.
-// A number close to 1 means that the HeartRate did not fluctuate much.
+// A number close to 1 means that HeartRate did not fluctuate much.
 func (s *HeartRateMetrics) VariabilityIndex() {
 	s.VI = float64(s.NHR) / float64(s.AHR)
 }
