@@ -1,8 +1,6 @@
 package cycling
 
 // ToDo
-// -use test data stored in a directory called "testdata" since go ignores
-// directories of that name when compiling.
 // -implement table-driven tests where applicable.
 import (
 	"encoding/json"
