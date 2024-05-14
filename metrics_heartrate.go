@@ -7,7 +7,6 @@ import "math"
 // populated based on that data.
 // The function NewHeartRateMetrics() is the prefered way to generate this type.
 type HeartRateMetrics struct {
-	HeartRateEachSec []int
 	Time             int     // in seconds
 	FTHR             int     // Funtional Threshold HeartRate
 	AHR              int     // Average Heart Rate
@@ -15,6 +14,7 @@ type HeartRateMetrics struct {
 	VI               float64 // Variability Index
 	IF               float64 // Intensity Factor
 	TSS              float64 // Training Stress Score
+	HeartRateEachSec []int
 }
 
 // NewHeartRateMetrics is the prefered method of creating a HeartRateMetrics type.

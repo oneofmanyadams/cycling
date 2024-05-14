@@ -7,7 +7,6 @@ import "math"
 // populated based on that data.
 // The function NewPowerMetrics() is the prefered way to generate this type.
 type PowerMetrics struct {
-	PowerEachSec []int
 	Time         int     // in seconds
 	FTP          int     // Functional Threshold Power
 	AP           int     // Average Power
@@ -15,6 +14,7 @@ type PowerMetrics struct {
 	VI           float64 // Variability Index
 	IF           float64 // Intensity Factor
 	TSS          float64 // Training Stress Score
+	PowerEachSec []int
 }
 
 // NewPowerMetrics is the prefered method of creating a PowerMetrics type.
