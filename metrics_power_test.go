@@ -5,81 +5,51 @@ package cycling
 // directories of that name when compiling.
 // -implement table-driven tests where applicable.
 import (
-	"reflect"
+	"encoding/json"
+	"os"
 	"testing"
 )
 
-func TestNewPowerMetrics_StaticFTP(t *testing.T) {
-	ftp := 250
-	pes := sampleDataPowerEachSec(2000, 200)
-	pow_mets := NewPowerMetrics(ftp, pes)
-	if ftp != pow_mets.FTP {
-		t.Fatalf(`PowerMetrics.FTP = %d, want %d`, pow_mets.FTP, ftp)
+func TestNewPowerMetrics(t *testing.T) {
+	var want_pm PowerMetrics
+	var got_pm PowerMetrics
+	// Unmarshal test json data into a new PowerMetrics type.
+	td, err := os.ReadFile("testdata/metrics_power_sampledata.json")
+	if err != nil {
+		t.Fatal(err)
 	}
-	if reflect.DeepEqual(pes, pow_mets.PowerEachSec) == false {
-		t.Fatalf("PowerMetrics.PowerEachSec does not equal to value passed to power_each_second value passed to NewPowerMetrics.")
-	}
-	if pow_mets.Time == 0 {
-		t.Fatal("Time value not initialized.")
-	}
-	if pow_mets.AP == 0 {
-		t.Fatal("AP value not initialized.")
-	}
-	if pow_mets.NP == 0 {
-		t.Fatal("NP value not initialized.")
-	}
-	if pow_mets.VI == 0 {
-		t.Fatal("VI value not initialized.")
-	}
-	if pow_mets.IF == 0 {
-		t.Fatal("IF value not initialized.")
-	}
-	if pow_mets.TSS == 0 {
-		t.Fatal("TSS value not initialized.")
-	}
-}
+	json.Unmarshal(td, &want_pm)
+	// Save testing data metrics to compare against.
+	got_pm = NewPowerMetrics(want_pm.FTP, want_pm.PowerEachSec)
+	t.Run("Calculate Time", func(t *testing.T) {
+		if want_pm.Time != got_pm.Time {
+			t.Fatalf("Want %d, got %d", want_pm.Time, got_pm.Time)
+		}
+	})
+	t.Run("Calculate AP", func(t *testing.T) {
+		if want_pm.AP != got_pm.AP {
+			t.Fatalf("Want %d, got %d", want_pm.AP, got_pm.AP)
+		}
+	})
+	t.Run("Calculate NP", func(t *testing.T) {
+		if want_pm.NP != got_pm.NP {
+			t.Fatalf("Want %d, got %d", want_pm.NP, got_pm.NP)
+		}
+	})
+	t.Run("Calculate VI", func(t *testing.T) {
+		if want_pm.VI != got_pm.VI {
+			t.Fatalf("Want %f, got %f", want_pm.VI, got_pm.VI)
+		}
+	})
+	t.Run("Calculate IF", func(t *testing.T) {
+		if want_pm.IF != got_pm.IF {
+			t.Fatalf("Want %f, got %f", want_pm.IF, got_pm.IF)
+		}
+	})
+	t.Run("Calculate TSS", func(t *testing.T) {
+		if want_pm.TSS != got_pm.TSS {
+			t.Fatalf("Want %f, got %f", want_pm.TSS, got_pm.TSS)
+		}
+	})
 
-func TestNewPowerMetrics_CalculatedFTP(t *testing.T) {
-	pes := sampleDataPowerEachSec(2000, 200)
-	pow_mets := NewPowerMetrics(0, pes)
-	if pow_mets.FTP == 0 {
-		t.Fatal("FTP value not initialized when passed as 0 to newPowerMetrics.")
-	}
-	if reflect.DeepEqual(pes, pow_mets.PowerEachSec) == false {
-		t.Fatal("PowerMetrics.PowerEachSec does not equal to value passed to power_each_second value passed to NewPowerMetrics.")
-	}
-	if pow_mets.Time == 0 {
-		t.Fatal("Time value not initialized.")
-	}
-	if pow_mets.AP == 0 {
-		t.Fatal("AP value not initialized.")
-	}
-	if pow_mets.NP == 0 {
-		t.Fatal("NP value not initialized.")
-	}
-	if pow_mets.VI == 0 {
-		t.Fatal("VI value not initialized.")
-	}
-	if pow_mets.IF == 0 {
-		t.Fatal("IF value not initialized.")
-	}
-	if pow_mets.TSS == 0 {
-		t.Fatal("TSS value not initialized.")
-	}
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// testing helper funcs
-
-// This function just builds a large int slice to mimic DataPowerEachSec,
-// since those slices are normally thousands of elements long and
-// unwieldy to type statically.
-func sampleDataPowerEachSec(size, min_val int) []int {
-	const step_size = 9
-	slice_size := size + step_size - (size % step_size)
-	var dpes []int
-	for i := 0; i < slice_size; i++ {
-		dpes = append(dpes, min_val+(i%step_size))
-	}
-	return dpes
 }
