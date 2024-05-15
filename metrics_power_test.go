@@ -39,7 +39,7 @@ func TestNewPowerMetrics(t *testing.T) {
 			t.Fatalf("Want %f, got %f", want_pm.VI, got_pm.VI)
 		}
 	})
-	t.Run("Calculate IF", func(t *testing.T) {
+	t.Run("Calculate INF", func(t *testing.T) {
 		if want_pm.INF != got_pm.INF {
 			t.Fatalf("Want %f, got %f", want_pm.INF, got_pm.INF)
 		}

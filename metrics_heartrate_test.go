@@ -24,12 +24,12 @@ func TestNewHeartRateMetrics(t *testing.T) {
 			t.Fatalf("Want %d, got %d", want_m.Time, got_m.Time)
 		}
 	})
-	t.Run("Calculate AP", func(t *testing.T) {
+	t.Run("Calculate AHR", func(t *testing.T) {
 		if want_m.AHR != got_m.AHR {
 			t.Fatalf("Want %d, got %d", want_m.AHR, got_m.AHR)
 		}
 	})
-	t.Run("Calculate NP", func(t *testing.T) {
+	t.Run("Calculate NHR", func(t *testing.T) {
 		if want_m.NHR != got_m.NHR {
 			t.Fatalf("Want %d, got %d", want_m.NHR, got_m.NHR)
 		}
@@ -39,7 +39,7 @@ func TestNewHeartRateMetrics(t *testing.T) {
 			t.Fatalf("Want %f, got %f", want_m.VI, got_m.VI)
 		}
 	})
-	t.Run("Calculate IF", func(t *testing.T) {
+	t.Run("Calculate INF", func(t *testing.T) {
 		if want_m.INF != got_m.INF {
 			t.Fatalf("Want %f, got %f", want_m.INF, got_m.INF)
 		}
