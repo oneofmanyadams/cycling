@@ -3,7 +3,6 @@ package cycling
 // ToDo
 // -implement table-driven tests where applicable.
 // ---Could use multiple seeds for building the loop that for FTP test
-// -Change NewPowerMetrics test to not be a nested test (just one test for all vals).
 // -Individual test for each method now that they accept args and return vals.
 import (
 	"encoding/json"
@@ -12,47 +11,34 @@ import (
 )
 
 func TestNewPowerMetrics(t *testing.T) {
-	var want_pm PowerMetrics
-	var got_pm PowerMetrics
+	var want_m PowerMetrics
+	var got_m PowerMetrics
 	// Unmarshal test json data into a new PowerMetrics type.
 	td, err := os.ReadFile("testdata/metrics_power_sampledata.json")
 	if err != nil {
 		t.Fatal(err)
 	}
-	json.Unmarshal(td, &want_pm)
+	json.Unmarshal(td, &want_m)
 	// Save testing data metrics to compare against.
-	got_pm = NewPowerMetrics(want_pm.FTP, want_pm.PowerEachSec)
-	t.Run("Calculate Time", func(t *testing.T) {
-		if want_pm.Time != got_pm.Time {
-			t.Fatalf("Want %d, got %d", want_pm.Time, got_pm.Time)
-		}
-	})
-	t.Run("Calculate AP", func(t *testing.T) {
-		if want_pm.AP != got_pm.AP {
-			t.Fatalf("Want %d, got %d", want_pm.AP, got_pm.AP)
-		}
-	})
-	t.Run("Calculate NP", func(t *testing.T) {
-		if want_pm.NP != got_pm.NP {
-			t.Fatalf("Want %d, got %d", want_pm.NP, got_pm.NP)
-		}
-	})
-	t.Run("Calculate VI", func(t *testing.T) {
-		if want_pm.VI != got_pm.VI {
-			t.Fatalf("Want %f, got %f", want_pm.VI, got_pm.VI)
-		}
-	})
-	t.Run("Calculate INF", func(t *testing.T) {
-		if want_pm.INF != got_pm.INF {
-			t.Fatalf("Want %f, got %f", want_pm.INF, got_pm.INF)
-		}
-	})
-	t.Run("Calculate TSS", func(t *testing.T) {
-		if want_pm.TSS != got_pm.TSS {
-			t.Fatalf("Want %f, got %f", want_pm.TSS, got_pm.TSS)
-		}
-	})
-
+	got_m = NewPowerMetrics(want_m.FTP, want_m.PowerEachSec)
+	if want_m.Time != got_m.Time {
+		t.Fatalf("Time = %d; want %d", got_m.Time, want_m.Time)
+	}
+	if want_m.AP != got_m.AP {
+		t.Fatalf("AP = %d, want %d", got_m.AP, want_m.AP)
+	}
+	if want_m.NP != got_m.NP {
+		t.Fatalf("NP = %d, want %d", got_m.NP, want_m.NP)
+	}
+	if want_m.VI != got_m.VI {
+		t.Fatalf("VI = %f, want %f", got_m.VI, want_m.VI)
+	}
+	if want_m.INF != got_m.INF {
+		t.Fatalf("INF = %f, want %f", got_m.INF, want_m.INF)
+	}
+	if want_m.TSS != got_m.TSS {
+		t.Fatalf("TSS = %f, want %f", got_m.TSS, want_m.TSS)
+	}
 }
 
 func TestFunctionalThresholdPower(t *testing.T) {
@@ -73,6 +59,6 @@ func TestFunctionalThresholdPower(t *testing.T) {
 	got := pm.FunctionalThresholdPower(&pm.PowerEachSec)
 	// compare against known FTP result.
 	if want != got {
-		t.Fatalf("Want: %d, Got: %d", want, got)
+		t.Fatalf("got: %d, want: %d", got, want)
 	}
 }
