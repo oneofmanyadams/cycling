@@ -40,8 +40,8 @@ func TestNewPowerMetrics(t *testing.T) {
 		}
 	})
 	t.Run("Calculate IF", func(t *testing.T) {
-		if want_pm.IF != got_pm.IF {
-			t.Fatalf("Want %f, got %f", want_pm.IF, got_pm.IF)
+		if want_pm.INF != got_pm.INF {
+			t.Fatalf("Want %f, got %f", want_pm.INF, got_pm.INF)
 		}
 	})
 	t.Run("Calculate TSS", func(t *testing.T) {
