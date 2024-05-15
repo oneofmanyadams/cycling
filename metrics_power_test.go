@@ -2,6 +2,9 @@ package cycling
 
 // ToDo
 // -implement table-driven tests where applicable.
+// ---Could use multiple seeds for building the loop that for FTP test
+// -Change NewPowerMetrics test to not be a nested test (just one test for all vals).
+// -Individual test for each method now that they accept args and return vals.
 import (
 	"encoding/json"
 	"os"
@@ -50,4 +53,26 @@ func TestNewPowerMetrics(t *testing.T) {
 		}
 	})
 
+}
+
+func TestFunctionalThresholdPower(t *testing.T) {
+	// create a new PowerMetrics type
+	var pm PowerMetrics
+	//build sample data set.
+	for i := 0; i < 2400; i++ {
+		if i%3 == 0 {
+			pm.PowerEachSec = append(pm.PowerEachSec, 260)
+		} else if i%2 == 0 {
+			pm.PowerEachSec = append(pm.PowerEachSec, 240)
+		} else {
+			pm.PowerEachSec = append(pm.PowerEachSec, 250)
+		}
+	}
+	want := 237 // The above loop should build a []int that results in a 237 FTP
+	// Run the functional thresholdpower method
+	got := pm.FunctionalThresholdPower(&pm.PowerEachSec)
+	// compare against known FTP result.
+	if want != got {
+		t.Fatalf("Want: %d, Got: %d", want, got)
+	}
 }
