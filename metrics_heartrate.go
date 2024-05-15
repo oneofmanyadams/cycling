@@ -12,7 +12,7 @@ type HeartRateMetrics struct {
 	AHR              int     // Average Heart Rate
 	NHR              int     // Normalized Heart Rate
 	VI               float64 // Variability Index
-	IF               float64 // Intensity Factor
+	INF              float64 // Intensity Factor
 	TSS              float64 // Training Stress Score
 	HeartRateEachSec []int
 }
@@ -83,14 +83,14 @@ func (s *HeartRateMetrics) VariabilityIndex() {
 // The larger the number, the harder the session was.
 // An IF of 1 basically means a session was done right at Threshold effort.
 func (s *HeartRateMetrics) IntensityFactor() {
-	s.IF = float64(s.NHR) / float64(s.FTHR)
+	s.INF = float64(s.NHR) / float64(s.FTHR)
 }
 
 // TrainingStressScore measures how difficult a session was relative
 // to an individual's FunctionalThresholdHeartRate.
 // Duplicates the same formula from PowerMetric's method of the same name.
 func (s *HeartRateMetrics) TrainingStressScore() {
-	effort_given := float64(s.Time) * float64(s.NHR) * s.IF
+	effort_given := float64(s.Time) * float64(s.NHR) * s.INF
 	baselines_effort := float64(s.FTHR) * 3600
 	s.TSS = effort_given / baselines_effort * 100.00
 }
