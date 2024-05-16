@@ -51,3 +51,26 @@ func TestNewHeartRateMetrics(t *testing.T) {
 	})
 
 }
+
+func TestFunctionalThresholdHeartRate(t *testing.T) {
+	// create HeartRateMetrics type.
+	var m HeartRateMetrics
+	// build sample data set.
+	for i := 0; i < 2400; i++ {
+		if i%3 == 0 {
+			m.HeartRateEachSec = append(m.HeartRateEachSec, 150)
+		} else if i%2 == 0 {
+			m.HeartRateEachSec = append(m.HeartRateEachSec, 130)
+		} else {
+			m.HeartRateEachSec = append(m.HeartRateEachSec, 140)
+		}
+	}
+	// Calculate FTHR
+	got := m.FunctionalThresholdHeartRate(&m.HeartRateEachSec)
+	// The above loop should build a []int that results in a 133 FTHR
+	want := 133
+	// compare against know FTHR result.
+	if got != want {
+		t.Fatalf("got: %d, want: %d", got, want)
+	}
+}
