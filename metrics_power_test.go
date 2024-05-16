@@ -41,6 +41,24 @@ func TestNewPowerMetrics(t *testing.T) {
 	}
 }
 
+func TestSessionTime_Power(t *testing.T) {
+	type testCase struct {
+		test []int
+		want int
+	}
+	cases := []testCase{
+		{[]int{1, 2, 3, 4}, 4},
+		{[]int{}, 0},
+		{[]int{1}, 1}}
+	var m PowerMetrics
+	for _, tc := range cases {
+		got := m.SessionTime(&tc.test)
+		if got != tc.want {
+			t.Fatalf("got: %d, want: %d", got, tc.want)
+		}
+	}
+}
+
 func TestFunctionalThresholdPower(t *testing.T) {
 	// create a new PowerMetrics type
 	var pm PowerMetrics
