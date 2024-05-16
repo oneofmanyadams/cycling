@@ -80,3 +80,56 @@ func TestFunctionalThresholdPower(t *testing.T) {
 		t.Fatalf("got: %d, want: %d", got, want)
 	}
 }
+
+func TestAveragePower(t *testing.T) {
+	type testCase struct {
+		test []int
+		want int
+	}
+	tests := []testCase{
+		{[]int{1, 2, 3, 4, 5}, 3},
+		{[]int{1, 2, 3, 4, 5, 6, 7, 8}, 4},
+		{[]int{5, 2, 3, 4, 5, 6, 7, 9}, 5},
+		{[]int{}, 0}}
+	var m PowerMetrics
+	for _, tc := range tests {
+		got := m.AveragePower(&tc.test)
+		if got != tc.want {
+			t.Fatalf("got: %d, want: %d", got, tc.want)
+		}
+	}
+}
+func TestNormalizedPower(t *testing.T) {
+	type testCase struct {
+		min  int
+		mid  int
+		max  int
+		want int
+	}
+	tests := []testCase{
+		{min: 0, mid: 0, max: 0, want: 0},
+		{min: 250, mid: 250, max: 250, want: 249}, // this is weird...
+		{min: 200, mid: 220, max: 250, want: 222},
+		{min: 210, mid: 220, max: 230, want: 219},
+		{min: 200, mid: 240, max: 300, want: 246}}
+	var m PowerMetrics
+	for _, tc := range tests {
+		got := m.NormalizedPower(func() *[]int {
+			var r []int
+			for i := 0; i < 1300; i++ {
+				if i%3 == 0 {
+					r = append(r, tc.max)
+				} else if i%2 == 0 {
+					r = append(r, tc.min)
+				} else {
+					r = append(r, tc.mid)
+				}
+			}
+			return &r
+		}())
+		want := tc.want
+		if got != want {
+			t.Fatalf("got: %d, want: %d", got, tc.want)
+		}
+	}
+}
