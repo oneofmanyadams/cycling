@@ -2,8 +2,8 @@
 A package for tracking and measuring various cycling related metrics.
 
 ### ToDo
-- Zones logic
 - Session logic
+- Zones logic
 - Session analyzer
 - Session suggester
 - Trends metrics
