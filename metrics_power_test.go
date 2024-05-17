@@ -6,6 +6,8 @@ package cycling
 // -Individual test for each method now that they accept args and return vals.
 import (
 	"encoding/json"
+	"fmt"
+	"math"
 	"os"
 	"testing"
 )
@@ -99,6 +101,7 @@ func TestAveragePower(t *testing.T) {
 		}
 	}
 }
+
 func TestNormalizedPower(t *testing.T) {
 	type testCase struct {
 		min  int
@@ -130,6 +133,76 @@ func TestNormalizedPower(t *testing.T) {
 		want := tc.want
 		if got != want {
 			t.Fatalf("got: %d, want: %d", got, tc.want)
+		}
+	}
+}
+
+func TestVariabilityIndex_Power(t *testing.T) {
+	type testCase struct {
+		np   int
+		ap   int
+		want float64
+	}
+	tests := []testCase{
+		{np: 250, ap: 250, want: 1.0},
+		{np: 260, ap: 240, want: 1.08333},
+		{np: 240, ap: 260, want: 0.92308},
+		{np: 0, ap: 1, want: 0.00},
+		{np: 0, ap: 0, want: math.NaN()},
+		{np: 1, ap: 0, want: math.Inf(1)}}
+	var m PowerMetrics
+	for _, tc := range tests {
+		got := m.VariabilityIndex(tc.np, tc.ap)
+		if fmt.Sprintf("%.5f", got) != fmt.Sprintf("%.5f", tc.want) {
+			t.Fatalf("got: %.5f, want: %.5f", got, tc.want)
+		}
+	}
+}
+
+func TestIntensityFactor_Power(t *testing.T) {
+	type testCase struct {
+		np   int
+		ftp  int
+		want float64
+	}
+	tests := []testCase{
+		{np: 250, ftp: 250, want: 1.0},
+		{np: 270, ftp: 250, want: 1.08},
+		{np: 190, ftp: 250, want: 0.76},
+		{np: 250, ftp: 200, want: 1.25},
+		{np: 0, ftp: 1, want: 0.00000},
+		{np: 0, ftp: 0, want: math.NaN()},
+		{np: 1, ftp: 0, want: math.Inf(1)}}
+	var m PowerMetrics
+	for _, tc := range tests {
+		got := m.IntensityFactor(tc.np, tc.ftp)
+		if fmt.Sprintf("%.5f", got) != fmt.Sprintf("%.5f", tc.want) {
+			t.Fatalf("got: %.5f, want: %.5f", got, tc.want)
+		}
+	}
+}
+
+func TestTrainingStressScore_Power(t *testing.T) {
+	type testCase struct {
+		time int
+		np   int
+		ftp  int
+		inf  float64
+		want float64
+	}
+	tests := []testCase{
+		{time: 3600, np: 250, ftp: 250, inf: 1.0, want: 100.0},
+		{time: 4800, np: 250, ftp: 250, inf: 1.0, want: 133.33333},
+		{time: 3600, np: 270, ftp: 250, inf: 1.0, want: 108.0},
+		{time: 3600, np: 250, ftp: 200, inf: 1.25, want: 156.25},
+		{time: 1200, np: 250, ftp: 250, inf: 1.0, want: 33.33333},
+		{time: 600, np: 450, ftp: 250, inf: 1.8, want: 54.0},
+	}
+	var m PowerMetrics
+	for _, tc := range tests {
+		got := m.TrainingStressScore(tc.time, tc.np, tc.ftp, tc.inf)
+		if fmt.Sprintf("%.5f", got) != fmt.Sprintf("%.5f", tc.want) {
+			t.Fatalf("got: %.5f, want: %.5f", got, tc.want)
 		}
 	}
 }
