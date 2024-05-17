@@ -1,9 +1,5 @@
 package cycling
 
-// ToDo
-// -implement table-driven tests where applicable.
-// ---Could use multiple seeds for building the loop that for FTP test
-// -Individual test for each method now that they accept args and return vals.
 import (
 	"encoding/json"
 	"fmt"
