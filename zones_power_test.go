@@ -37,3 +37,46 @@ func TestMatchZone(t *testing.T) {
 		}
 	}
 }
+func TestMatches_Power(t *testing.T) {
+	type testCase struct {
+		tst_pwr   int
+		z_min_pwr int
+		z_max_pwr int
+		want      bool
+	}
+	cases := []testCase{
+		{tst_pwr: 250, z_min_pwr: 240, z_max_pwr: 260, want: true},
+		{tst_pwr: 250, z_min_pwr: 250, z_max_pwr: 260, want: true},
+		{tst_pwr: 250, z_min_pwr: 240, z_max_pwr: 250, want: true},
+		{tst_pwr: 250, z_min_pwr: 260, z_max_pwr: 270, want: false},
+		{tst_pwr: 250, z_min_pwr: 230, z_max_pwr: 240, want: false},
+		{tst_pwr: 0, z_min_pwr: 0, z_max_pwr: 240, want: true}}
+	for k, tc := range cases {
+		t_zone := PowerZone{MinWatts: tc.z_min_pwr, MaxWatts: tc.z_max_pwr}
+		got := t_zone.Matches(tc.tst_pwr)
+		if tc.want != got {
+			t.Fatalf("Test case %d got: %t, want: %t", k, got, tc.want)
+		}
+	}
+}
+
+func TestAvgWatts(t *testing.T) {
+	type testCase struct {
+		z_min_pwr int
+		z_max_pwr int
+		want      int
+	}
+	cases := []testCase{
+		{z_min_pwr: 240, z_max_pwr: 260, want: 250},
+		{z_min_pwr: 235, z_max_pwr: 260, want: 247},
+		{z_min_pwr: 220, z_max_pwr: 260, want: 240},
+		{z_min_pwr: 0, z_max_pwr: 160, want: 80},
+		{z_min_pwr: 270, z_max_pwr: 2060, want: 1165}}
+	for k, tc := range cases {
+		t_zone := PowerZone{MinWatts: tc.z_min_pwr, MaxWatts: tc.z_max_pwr}
+		got := t_zone.AvgWatts()
+		if tc.want != got {
+			t.Fatalf("Test case %d got: %d, want: %d", k, got, tc.want)
+		}
+	}
+}
