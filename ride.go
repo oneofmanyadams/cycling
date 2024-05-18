@@ -1,6 +1,6 @@
 package cycling
 
-type Session struct {
+type Ride struct {
 	TimeStampEachSec   []int64
 	PowerEachSec       []int
 	HeartRateEachSec   []int
@@ -10,24 +10,24 @@ type Session struct {
 	CaloriesCumulative []int
 }
 
-func (s *Session) AddTime(t int64) {
+func (s *Ride) AddTime(t int64) {
 	s.TimeStampEachSec = append(s.TimeStampEachSec, t)
 }
-func (s *Session) AddPower(p int) {
+func (s *Ride) AddPower(p int) {
 	s.PowerEachSec = append(s.PowerEachSec, p)
 }
-func (s *Session) AddHeartRate(hr int) {
+func (s *Ride) AddHeartRate(hr int) {
 	s.HeartRateEachSec = append(s.HeartRateEachSec, hr)
 }
-func (s *Session) AddCadence(c int) {
+func (s *Ride) AddCadence(c int) {
 	s.CadenceEachSec = append(s.CadenceEachSec, c)
 }
-func (s *Session) AddSpeed(sp float64) {
+func (s *Ride) AddSpeed(sp float64) {
 	s.SpeedEachSec = append(s.SpeedEachSec, sp)
 }
-func (s *Session) AddDistance(d float64) {
+func (s *Ride) AddDistance(d float64) {
 	s.DistanceCumulative = append(s.DistanceCumulative, d)
 }
-func (s *Session) AddCalories(cal int) {
+func (s *Ride) AddCalories(cal int) {
 	s.CaloriesCumulative = append(s.CaloriesCumulative, cal)
 }
