@@ -37,11 +37,9 @@ func (s *PowerZones) MatchZone(pwr int) (PowerZone, error) {
 }
 
 type PowerZone struct {
-	Number      int
-	Name        string
-	Description string
-	MinWatts    int
-	MaxWatts    int
+	Number   int
+	MinWatts int
+	MaxWatts int
 }
 
 func (s *PowerZone) Matches(power int) bool {
