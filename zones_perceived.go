@@ -7,7 +7,3 @@ type PerceivedZone struct {
 	MinExertion int
 	MaxExertion int
 }
-
-func (s *PerceivedZone) AvgExertion() int {
-	return (s.MaxExertion + s.MinExertion) / 2
-}

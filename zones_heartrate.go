@@ -7,7 +7,3 @@ type HeartZone struct {
 	MinBPM      int
 	MaxBPM      int
 }
-
-func (s *HeartZone) AvgBPM() int {
-	return (s.MaxBPM + s.MinBPM) / 2
-}
