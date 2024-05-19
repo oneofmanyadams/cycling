@@ -4,6 +4,62 @@ import (
 	"testing"
 )
 
+func TestNewPowerZones(t *testing.T) {
+	type wantZone struct {
+		num int
+		min int
+		max int
+	}
+	type testCase struct {
+		ftp        int
+		maxes      []float64
+		want_zones []wantZone
+	}
+	cases := []testCase{
+		{ftp: 250, maxes: []float64{0.55, 0.75, .90, 1.05, 1.20, 1.4, 3.0},
+			want_zones: []wantZone{
+				{num: 1, min: 0, max: 137},
+				{num: 2, min: 138, max: 187},
+				{num: 3, min: 188, max: 225},
+				{num: 4, min: 226, max: 262},
+				{num: 5, min: 263, max: 300},
+				{num: 6, min: 301, max: 350},
+				{num: 7, min: 351, max: 750},
+			},
+		},
+		{ftp: 250, maxes: []float64{0.55, 0.75, .90, 1.10, 3.0},
+			want_zones: []wantZone{
+				{num: 1, min: 0, max: 137},
+				{num: 2, min: 138, max: 187},
+				{num: 3, min: 188, max: 225},
+				{num: 4, min: 226, max: 275},
+				{num: 5, min: 276, max: 750},
+			},
+		},
+		{ftp: 250, maxes: []float64{0.75, 1.20, 3.0},
+			want_zones: []wantZone{
+				{num: 1, min: 0, max: 187},
+				{num: 2, min: 188, max: 300},
+				{num: 3, min: 301, max: 750},
+			},
+		},
+	}
+	for k, tc := range cases {
+		got := NewPowerZones(tc.ftp, tc.maxes)
+		if len(got) != len(tc.want_zones) {
+			t.Fatalf("Test case %d wrong number of zones. got: %d, want: %d", k, len(got), len(tc.want_zones))
+		}
+		for tzk, tz := range got {
+			if tz.MinWatts != tc.want_zones[tzk].min {
+				t.Fatalf("Test case %d, zone %d non-matching MinWatts. got: %d, want %d", k, tzk, tz.MinWatts, tc.want_zones[tzk].min)
+			}
+			if tz.MaxWatts != tc.want_zones[tzk].max {
+				t.Fatalf("Test case %d, zone %d non-matching MaxWatts. got: %d, want %d", k, tzk, tz.MaxWatts, tc.want_zones[tzk].max)
+			}
+		}
+	}
+}
+
 func TestMatchZone(t *testing.T) {
 	zones := PowerZones{}
 	zones = append(zones, PowerZone{Number: 1, MinWatts: 0, MaxWatts: 100})
