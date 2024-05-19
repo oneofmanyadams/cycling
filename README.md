@@ -20,3 +20,4 @@ A package for tracking and measuring various cycling related metrics.
     - Uncouple functions from structs?
     - Figure out why NormalizedPower calculates 249 when all []ints are 250
 - ~~Ride logic~~
+- ~~Write tests for Ride methods.~~
