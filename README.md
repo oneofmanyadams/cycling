@@ -2,6 +2,7 @@
 A package for tracking and measuring various cycling related metrics.
 
 ### ToDo
+- Tests for helper functions.
 - Zones logic
     - ~~PowerZone match based on provided power~~
     - ~~Zone calculator based on % of FTP~~
@@ -12,6 +13,7 @@ A package for tracking and measuring various cycling related metrics.
 - Session analyzer
 - Session suggester
 - Trends metrics
+- Performance adaptations logic
 - Metrics functions
     - ~~Finish Unit tests.~~
     - Remove calculate method from power/hr metrics.
