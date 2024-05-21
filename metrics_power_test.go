@@ -39,6 +39,21 @@ func TestNewPowerMetrics(t *testing.T) {
 	}
 }
 
+func TestNewPowerMetrics_NoFTP(t *testing.T) {
+	var want_m PowerMetrics
+	var got_m PowerMetrics
+	td, err := os.ReadFile("testdata/metrics_power_sampledata.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	json.Unmarshal(td, &want_m)
+	// Save testing data metrics to compare against.
+	got_m = NewPowerMetrics(0, want_m.PowerEachSec)
+	if got_m.FTP != 162 {
+		t.Fatalf("got: %d, want: %d", got_m.FTP, 162)
+	}
+}
+
 func TestSessionTime_Power(t *testing.T) {
 	type testCase struct {
 		test []int

@@ -41,14 +41,17 @@ func largestSub(ints []int, size int) (largest []int) {
 	return largest
 }
 
-func minAvgInts(ints []int, min int) float64 {
-	if len(ints) > min {
-		min = len(ints)
+// minAvgInts calculates the avergae of the provided int slice, however if
+// the length of that int slice is less than the provided minn then minn
+// is used as the denominator of the average calculation.
+func minAvgInts(ints []int, minn int) float64 {
+	if len(ints) > minn {
+		minn = len(ints)
 	}
-	if min < 1 {
+	if minn < 1 {
 		return 0.0
 	}
-	return float64(sumInts(ints)) / float64(min)
+	return float64(sumInts(ints)) / float64(minn)
 }
 
 func avgInts(ints []int) float64 {

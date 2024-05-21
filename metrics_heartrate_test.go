@@ -39,6 +39,21 @@ func TestNewHeartRateMetrics(t *testing.T) {
 	}
 
 }
+func TestNewHeartRateMetrics_NoFTHR(t *testing.T) {
+	var want_m HeartRateMetrics
+	var got_m HeartRateMetrics
+	// Unmarshal test json data into a new HeartRateMetrics type.
+	td, err := os.ReadFile("testdata/metrics_heartrate_sampledata.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	json.Unmarshal(td, &want_m)
+	// Save testing data metrics to compare against.
+	got_m = NewHeartRateMetrics(0, want_m.HeartRateEachSec)
+	if got_m.FTHR != 121 {
+		t.Fatalf("got %d, want %d", got_m.FTHR, 121)
+	}
+}
 
 func TestSessionTime_HeartRate(t *testing.T) {
 	type testCase struct {
