@@ -2,14 +2,13 @@
 A package for tracking and measuring various cycling related metrics.
 
 ### ToDo
-- Tests for helper functions.
 - Zones logic
     - ~~PowerZone match based on provided power~~
     - ~~Zone calculator based on % of FTP~~
     - Zone duration calculations?
     - Zone standard templates (which provides %'s)
     - Duplicate logic to HearRate zones
-    - Determine if prreceived effort zones are needed.
+    - Determine if preceived effort zones are needed.
 - Session analyzer
 - Session suggester
 - Trends metrics
@@ -23,3 +22,4 @@ A package for tracking and measuring various cycling related metrics.
     - Figure out why NormalizedPower calculates 249 when all []ints are 250
 - ~~Ride logic~~
 - ~~Write tests for Ride methods.~~
+- ~~Tests for helper functions.~~

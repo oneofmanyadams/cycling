@@ -9,7 +9,7 @@ import (
 type PowerZones []PowerZone
 
 // NewPowerZones calculates power zones based on a rirder's ftp as well as a
-// list of of each zone's max_ftp (in terrms of a %of the ftp.
+// list of of each zone's max_ftp (in terrms of a %of the ftp).
 func NewPowerZones(ftp int, max_ftps []float64) PowerZones {
 	sort.Float64s(max_ftps)
 	var pzs PowerZones
