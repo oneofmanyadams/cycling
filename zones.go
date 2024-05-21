@@ -1,5 +1,7 @@
 package cycling
 
+type Zones []Zone
+
 type Zone struct {
 	Level       int
 	Name        string
