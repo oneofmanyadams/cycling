@@ -6,9 +6,13 @@ A package for tracking and measuring various cycling related metrics.
     - ~~PowerZone match based on provided power~~
     - ~~Zone calculator based on % of FTP~~
     - Zone standard templates (which provides %'s)
-        - Populate zone template via json with actual data in configs dir.
+        - ~~Include FTP/FTHR max %s~~
+        - ~~Separate file with default zone data~~.
+        - Method on Zones to return []float64 list of max pwr/hr
+        - Zone required recovery?
     - Zone duration calculations?
-    - Sort method for zones slice (sort smallest zone to largest)
+    - ~~Sort method for zones slice (sort smallest zone to largest)~~
+    - Tests for zone sort functions
     - Duplicate logic to HearRate zones
     - Determine if preceived effort zones are needed.
 - Ride logic

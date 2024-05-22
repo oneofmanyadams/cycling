@@ -22,6 +22,6 @@ type Zone struct {
 	Description  string
 	MinDuration  int
 	MaxDuration  int
-	MaxHeartRate int
-	MaxPower     int
+	MaxHeartRate float64
+	MaxPower     float64
 }
