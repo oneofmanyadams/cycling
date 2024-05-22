@@ -13,8 +13,8 @@ A package for tracking and measuring various cycling related metrics.
     - Determine if preceived effort zones are needed.
 - Ride logic
     - ~~Initial ride logic~~
-    - Session analyzer
-    - Session suggester
+    - Ride analyzer
+    - Ride suggester
         - Consider user provided available hours/days of week.
         - Target improvement areas (based on performance adaptations logic).
         - Weigh zones based on performance adaptations.
@@ -22,6 +22,10 @@ A package for tracking and measuring various cycling related metrics.
 - Performance adaptations logic
 - Metrics functions
     - ~~Finish Unit tests.~~
+    - Add additional metrics
+        - CTL/Fitness
+        - ATL/Fatigue
+        - TSB/Form(freshness)
     - Remove calculate method from power/hr metrics.
     - Can we actually just remove the need to hold []int at all?
     - Potentially break out generic functions to metrics_generics?
