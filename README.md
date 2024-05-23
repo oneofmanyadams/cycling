@@ -24,9 +24,9 @@ A package for tracking and measuring various cycling related metrics.
         - Weigh zones based on performance adaptations.
         - Use 80/20 split (or similar logic0 to suggest Zone1-2 vs Zone4+ time?
 - Trends metrics
-        - CTL/Fitness
-        - ATL/Fatigue
-        - TSB/Form(freshness)
+    - CTL/Fitness
+    - ATL/Fatigue
+    - TSB/Form(freshness)
 - Performance adaptations logic
 - Metrics functions
     - ~~Finish Unit tests.~~
