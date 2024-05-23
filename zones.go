@@ -36,11 +36,12 @@ func (s *Zones) MaxPowers() []float64 {
 }
 
 type Zone struct {
-	Level        int
-	Name         string
-	Description  string
-	MinDuration  int
-	MaxDuration  int
-	MaxHeartRate float64
-	MaxPower     float64
+	Level            int
+	Name             string
+	Description      string
+	MinDuration      int
+	MaxDuration      int
+	RecoveryInterval float64
+	MaxHeartRate     float64
+	MaxPower         float64
 }

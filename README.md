@@ -22,6 +22,7 @@ A package for tracking and measuring various cycling related metrics.
         - Consider user provided available hours/days of week.
         - Target improvement areas (based on performance adaptations logic).
         - Weigh zones based on performance adaptations.
+        - Use 80/20 split (or similar logic0 to suggest Zone1-2 vs Zone4+ time?
 - Trends metrics
 - Performance adaptations logic
 - Metrics functions
