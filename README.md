@@ -10,12 +10,11 @@ A package for tracking and measuring various cycling related metrics.
         - ~~Separate file with default zone data~~.
         - ~~Method on Zones to return []float64 list of max pwr/hr~~
         - Zone required recovery?
-    - Logic for loading Zones from template.
     - Zone duration calculations?
     - ~~Sort method for zones slice (sort smallest zone to largest)~~
     - Tests for zone sort functions
     - Duplicate logic to HearRate zones
-    - Determine if preceived effort zones are needed.
+    - ~~Determine if preceived effort zones are needed.~~
 - Ride logic
     - ~~Initial ride logic~~
     - Ride analyzer
