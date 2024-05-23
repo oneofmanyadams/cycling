@@ -8,8 +8,9 @@ A package for tracking and measuring various cycling related metrics.
     - Zone standard templates (which provides %'s)
         - ~~Include FTP/FTHR max %s~~
         - ~~Separate file with default zone data~~.
-        - Method on Zones to return []float64 list of max pwr/hr
+        - ~~Method on Zones to return []float64 list of max pwr/hr~~
         - Zone required recovery?
+    - Logic for loading Zones from template.
     - Zone duration calculations?
     - ~~Sort method for zones slice (sort smallest zone to largest)~~
     - Tests for zone sort functions
