@@ -13,7 +13,8 @@ A package for tracking and measuring various cycling related metrics.
     - ~~Zone duration calculations?~~
     - ~~Sort method for zones slice (sort smallest zone to largest)~~
     - ~~Tests for zone sort functions~~
-    - Duplicate logic to HearRate zones
+    - ~~Duplicate logic to HearRate zones~~
+    - Tests for HearRate zones methods
     - ~~Determine if preceived effort zones are needed.~~
 - Ride logic
     - ~~Initial ride logic~~
