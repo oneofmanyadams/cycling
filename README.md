@@ -4,6 +4,7 @@ A package for tracking and measuring various cycling related metrics.
 ### ToDo
 - Zones logic
     - Tests for HearRate zones methods
+    - ~~Finish Zones tests.~~
     - ~~PowerZone match based on provided power~~
     - ~~Zone calculator based on % of FTP~~
     - ~~Zone standard templates (which provides %'s)~~

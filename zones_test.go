@@ -35,6 +35,9 @@ func TestLess(t *testing.T) {
 		{tzns: Zones{
 			{Level: 1}, {Level: 2}},
 			small: 1, big: 0, want: false},
+		{tzns: Zones{
+			{Level: 1}, {Level: 2}},
+			small: 1, big: 3, want: false},
 	}
 	for k, tc := range cases {
 		got := tc.tzns.Less(tc.small, tc.big)
@@ -73,4 +76,54 @@ func TestSwap(t *testing.T) {
 		}
 	}
 
+}
+
+func TestMaxHeartRates(t *testing.T) {
+	type testCase struct {
+		want []float64
+	}
+	cases := []testCase{
+		{want: []float64{0.5, 1.0, 1.5, 2.0}},
+	}
+	for k, tc := range cases {
+		var zns Zones
+		for _, w := range tc.want {
+			zns = append(zns, Zone{MaxHeartRate: w})
+		}
+		max_hrs := zns.MaxHeartRates()
+		if len(max_hrs) != len(tc.want) {
+			t.Fatalf("Test %d missmatch lens got: %d, want: %d", k, len(max_hrs), len(tc.want))
+		}
+		for key, got := range max_hrs {
+			want_val := tc.want[key]
+			if got != want_val {
+				t.Fatalf("Test %d got: %f, want: %f", k, got, want_val)
+			}
+		}
+	}
+}
+
+func TestMaxPowers(t *testing.T) {
+	type testCase struct {
+		want []float64
+	}
+	cases := []testCase{
+		{want: []float64{0.5, 1.0, 1.5, 2.0}},
+	}
+	for k, tc := range cases {
+		var zns Zones
+		for _, w := range tc.want {
+			zns = append(zns, Zone{MaxPower: w})
+		}
+		max_hrs := zns.MaxPowers()
+		if len(max_hrs) != len(tc.want) {
+			t.Fatalf("Test %d missmatch lens got: %d, want: %d", k, len(max_hrs), len(tc.want))
+		}
+		for key, got := range max_hrs {
+			want_val := tc.want[key]
+			if got != want_val {
+				t.Fatalf("Test %d got: %f, want: %f", k, got, want_val)
+			}
+		}
+	}
 }
