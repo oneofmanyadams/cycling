@@ -19,7 +19,7 @@ func (s Zones) Swap(i, j int) {
 }
 
 // Max []float64 methods
-func (s *Zones) MaxHearRates() []float64 {
+func (s *Zones) MaxHeartRates() []float64 {
 	var heart_rates []float64
 	for _, z := range *s {
 		heart_rates = append(heart_rates, z.MaxHeartRate)
