@@ -2,21 +2,6 @@
 A package for tracking and measuring various cycling related metrics.
 
 ### ToDo
-- Zones logic
-    - Tests for HearRate zones methods
-    - ~~Finish Zones tests.~~
-    - ~~PowerZone match based on provided power~~
-    - ~~Zone calculator based on % of FTP~~
-    - ~~Zone standard templates (which provides %'s)~~
-        - ~~Include FTP/FTHR max %s~~
-        - ~~Separate file with default zone data~~.
-        - ~~Method on Zones to return []float64 list of max pwr/hr~~
-        - ~~Zone required recovery?~~
-    - ~~Zone duration calculations?~~
-    - ~~Sort method for zones slice (sort smallest zone to largest)~~
-    - ~~Tests for zone sort functions~~
-    - ~~Duplicate logic to HearRate zones~~
-    - ~~Determine if preceived effort zones are needed.~~
 - Metrics functions
     - Remove calculate method from power/hr metrics.
     - Can we actually just remove the need to hold []int at all?
@@ -39,3 +24,19 @@ A package for tracking and measuring various cycling related metrics.
 - Figure out why NormalizedPower calculates 249 when all []ints are 250
 - ~~Write tests for Ride methods.~~
 - ~~Tests for helper functions.~~
+- ~~Zones logic~~
+    - ~~Tests for HearRate zones methods~~
+    - ~~Finish Zones tests.~~
+    - ~~PowerZone match based on provided power~~
+    - ~~Zone calculator based on % of FTP~~
+    - ~~Zone standard templates (which provides %'s)~~
+        - ~~Include FTP/FTHR max %s~~
+        - ~~Separate file with default zone data~~.
+        - ~~Method on Zones to return []float64 list of max pwr/hr~~
+        - ~~Zone required recovery?~~
+    - ~~Zone duration calculations?~~
+    - ~~Sort method for zones slice (sort smallest zone to largest)~~
+    - ~~Tests for zone sort functions~~
+    - ~~Duplicate logic to HearRate zones~~
+    - ~~Determine if preceived effort zones are needed.~~
+
