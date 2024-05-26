@@ -23,25 +23,21 @@ type HeartRateMetrics struct {
 // the best 20min effort in the provided hr_each_second.
 func NewHeartRateMetrics(fthr int, hr_each_second []int) HeartRateMetrics {
 	var hrm HeartRateMetrics
-	hrm.FTHR = fthr
-	hrm.HeartRateEachSec = hr_each_second
-	hrm.CalculateMetrics()
-	return hrm
-}
 
-// CalculateMetrics runs all metrics caluclating methods in the correct
-// order they need to be called in to correctly populate a HeartRateMetrics.
-// FunctionalThresholdHeartRate is not called if it is already set (>0).
-func (s *HeartRateMetrics) CalculateMetrics() {
-	s.Time = s.SessionTime(&s.HeartRateEachSec)
-	if s.FTHR <= 0 {
-		s.FTHR = s.FunctionalThresholdHeartRate(&s.HeartRateEachSec)
+	if fthr <= 0 {
+		hrm.FTHR = hrm.FunctionalThresholdHeartRate(&hr_each_second)
+	} else {
+		hrm.FTHR = fthr
 	}
-	s.AHR = s.AverageHeartRate(&s.HeartRateEachSec)
-	s.NHR = s.NormalizedHeartRate(&s.HeartRateEachSec)
-	s.VI = s.VariabilityIndex(s.NHR, s.AHR)
-	s.INF = s.IntensityFactor(s.NHR, s.FTHR)
-	s.TSS = s.TrainingStressScore(s.Time, s.NHR, s.FTHR, s.INF)
+	hrm.HeartRateEachSec = hr_each_second
+	hrm.Time = hrm.SessionTime(&hr_each_second)
+	hrm.AHR = hrm.AverageHeartRate(&hr_each_second)
+	hrm.NHR = hrm.NormalizedHeartRate(&hr_each_second)
+	hrm.VI = hrm.VariabilityIndex(hrm.NHR, hrm.AHR)
+	hrm.INF = hrm.IntensityFactor(hrm.NHR, hrm.FTHR)
+	hrm.TSS = hrm.TrainingStressScore(hrm.Time, hrm.NHR, hrm.FTHR, hrm.INF)
+
+	return hrm
 }
 
 // SessionTime calculates Time based on total number of elements in HeartRateEachSec.

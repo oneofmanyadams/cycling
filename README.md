@@ -3,10 +3,10 @@ A package for tracking and measuring various cycling related metrics.
 
 ### ToDo
 - Metrics functions
-    - Remove calculate method from power/hr metrics.
     - Can we actually just remove the need to hold []int at all?
     - Uncouple functions from structs?
     - Potentially break out generic functions to metrics_generics?
+    - ~~Remove calculate method from power/hr metrics.~~
     - ~~Finish Unit tests.~~
 - Trends metrics
     - CTL/Fitness

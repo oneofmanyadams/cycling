@@ -23,25 +23,21 @@ type PowerMetrics struct {
 // on the best 20min effort in the provided power_each_second.
 func NewPowerMetrics(ftp int, power_each_second []int) PowerMetrics {
 	var pm PowerMetrics
-	pm.FTP = ftp
-	pm.PowerEachSec = power_each_second
-	pm.CalculateMetrics()
-	return pm
-}
 
-// CalculateMetrics runs all metrics calculating methods in the correct
-// order they need to be called in to corrrectly populate PowerMetrics.
-// FunctionalThresholdPower is not called if it is already set (>0).
-func (s *PowerMetrics) CalculateMetrics() {
-	s.Time = s.SessionTime(&s.PowerEachSec)
-	if s.FTP <= 0 {
-		s.FTP = s.FunctionalThresholdPower(&s.PowerEachSec)
+	if ftp <= 0 {
+		pm.FTP = pm.FunctionalThresholdPower(&power_each_second)
+	} else {
+		pm.FTP = ftp
 	}
-	s.AP = s.AveragePower(&s.PowerEachSec)
-	s.NP = s.NormalizedPower(&s.PowerEachSec)
-	s.VI = s.VariabilityIndex(s.NP, s.AP)
-	s.INF = s.IntensityFactor(s.NP, s.FTP)
-	s.TSS = s.TrainingStressScore(s.Time, s.NP, s.FTP, s.INF)
+	pm.PowerEachSec = power_each_second
+	pm.Time = pm.SessionTime(&power_each_second)
+	pm.AP = pm.AveragePower(&power_each_second)
+	pm.NP = pm.NormalizedPower(&power_each_second)
+	pm.VI = pm.VariabilityIndex(pm.NP, pm.AP)
+	pm.INF = pm.IntensityFactor(pm.NP, pm.FTP)
+	pm.TSS = pm.TrainingStressScore(pm.Time, pm.NP, pm.FTP, pm.INF)
+
+	return pm
 }
 
 // SessionTime calculates Time based on total number of elements in PowerEachSec.
