@@ -18,6 +18,19 @@ func movingAverageInts(ints []int, period int) []int {
 	return avgs
 }
 
+func movingAverageFloats(flts []float64, period int) (avgs []float64) {
+	for k := range flts {
+		start := k - period
+		if start < 0 {
+			start = 0
+		}
+		perod_sum := sumFloats(flts[start:k])
+		period_avg := perod_sum / float64(period)
+		avgs = append(avgs, period_avg)
+	}
+	return avgs
+}
+
 // largestSubsetAvg finds the average of the largest sub-slice of size in slice values.
 func largestSubsetAvg(ints []int, size int) float64 {
 	return minAvgInts(largestSub(ints, size), size)
@@ -54,6 +67,16 @@ func minAvgInts(ints []int, minn int) float64 {
 	return float64(sumInts(ints)) / float64(minn)
 }
 
+func minAvgFloats(flts []float64, minn int) float64 {
+	if len(flts) > minn {
+		minn = len(flts)
+	}
+	if minn < 1 {
+		return 0.0
+	}
+	return sumFloats(flts) / float64(minn)
+}
+
 func avgInts(ints []int) float64 {
 	if len(ints) < 1 {
 		return 0.0
@@ -61,8 +84,22 @@ func avgInts(ints []int) float64 {
 	return float64(sumInts(ints)) / float64(len(ints))
 }
 
+func avgFloats(flts []float64) float64 {
+	if len(flts) < 1 {
+		return 0.0
+	}
+	return sumFloats(flts) / float64(len(flts))
+}
+
 func sumInts(ints []int) (sum int) {
 	for _, v := range ints {
+		sum = sum + v
+	}
+	return sum
+}
+
+func sumFloats(flts []float64) (sum float64) {
+	for _, v := range flts {
 		sum = sum + v
 	}
 	return sum

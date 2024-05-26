@@ -3,9 +3,11 @@ A package for tracking and measuring various cycling related metrics.
 
 ### ToDo
 - Trends metrics
-    - CTL/Fitness
-    - ATL/Fatigue
-    - TSB/Form(freshness)
+    - tests for trends metrics and new helper functions.
+    - Simple Moving Avgs for trends metrics?
+    - ~~CTL/Fitness~~
+    - ~~ATL/Fatigue~~
+    - ~~TSB/Form(freshness)~~
 - Ride logic
     - Ride analyzer
     - Ride suggester
