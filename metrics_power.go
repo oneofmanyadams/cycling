@@ -7,14 +7,13 @@ import "math"
 // populated based on that data.
 // The function NewPowerMetrics() is the prefered way to generate this type.
 type PowerMetrics struct {
-	Time         int     // in seconds
-	FTP          int     // Functional Threshold Power
-	AP           int     // Average Power
-	NP           int     // Normalized Power
-	VI           float64 // Variability Index
-	INF          float64 // Intensity Factor
-	TSS          float64 // Training Stress Score
-	PowerEachSec []int
+	Time int     // in seconds
+	FTP  int     // Functional Threshold Power
+	AP   int     // Average Power
+	NP   int     // Normalized Power
+	VI   float64 // Variability Index
+	INF  float64 // Intensity Factor
+	TSS  float64 // Training Stress Score
 }
 
 // NewPowerMetrics is the prefered method of creating a PowerMetrics type.
@@ -29,7 +28,6 @@ func NewPowerMetrics(ftp int, power_each_second []int) PowerMetrics {
 	} else {
 		pm.FTP = ftp
 	}
-	pm.PowerEachSec = power_each_second
 	pm.Time = pm.SessionTime(&power_each_second)
 	pm.AP = pm.AveragePower(&power_each_second)
 	pm.NP = pm.NormalizedPower(&power_each_second)

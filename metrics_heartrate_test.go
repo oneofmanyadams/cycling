@@ -21,7 +21,6 @@ func TestNewHeartRateMetrics(t *testing.T) {
 	json.Unmarshal(td, &ride)
 	// Manually call metrics functions in correct order to compate against.
 	w.FTHR = fthr
-	w.HeartRateEachSec = ride.HeartRateEachSec
 	w.Time = w.SessionTime(&ride.HeartRateEachSec)
 	w.AHR = w.AverageHeartRate(&ride.HeartRateEachSec)
 	w.NHR = w.NormalizedHeartRate(&ride.HeartRateEachSec)
@@ -29,7 +28,7 @@ func TestNewHeartRateMetrics(t *testing.T) {
 	w.INF = w.IntensityFactor(w.NHR, w.FTHR)
 	w.TSS = w.TrainingStressScore(w.Time, w.NHR, w.FTHR, w.INF)
 
-	got_m = NewHeartRateMetrics(fthr, w.HeartRateEachSec)
+	got_m = NewHeartRateMetrics(fthr, ride.HeartRateEachSec)
 	if w.Time != got_m.Time {
 		t.Fatalf("Want %d, got %d", w.Time, got_m.Time)
 	}
@@ -48,7 +47,6 @@ func TestNewHeartRateMetrics(t *testing.T) {
 	if w.TSS != got_m.TSS {
 		t.Fatalf("Want %f, got %f", w.TSS, got_m.TSS)
 	}
-
 }
 
 func TestNewHeartRateMetrics_NoFTHR(t *testing.T) {
@@ -88,44 +86,23 @@ func TestSessionTime_HeartRate(t *testing.T) {
 func TestFunctionalThresholdHeartRate(t *testing.T) {
 	// create HeartRateMetrics type.
 	var m HeartRateMetrics
+	var hrs []int
 	// build sample data set.
 	for i := 0; i < 2400; i++ {
 		if i%3 == 0 {
-			m.HeartRateEachSec = append(m.HeartRateEachSec, 150)
+			hrs = append(hrs, 150)
 		} else if i%2 == 0 {
-			m.HeartRateEachSec = append(m.HeartRateEachSec, 130)
+			hrs = append(hrs, 130)
 		} else {
-			m.HeartRateEachSec = append(m.HeartRateEachSec, 140)
+			hrs = append(hrs, 140)
 		}
 	}
 	// Calculate FTHR
-	got := m.FunctionalThresholdHeartRate(&m.HeartRateEachSec)
+	got := m.FunctionalThresholdHeartRate(&hrs)
 	// The above loop should build a []int that results in a 133 FTHR
 	want := 133
 	// compare against know FTHR result.
 	if got != want {
-		t.Fatalf("got: %d, want: %d", got, want)
-	}
-}
-
-func TestFunctionalThresholdHearRate(t *testing.T) {
-	// create a new HeartRateMetrics type
-	var m HeartRateMetrics
-	//build sample data set.
-	for i := 0; i < 2400; i++ {
-		if i%3 == 0 {
-			m.HeartRateEachSec = append(m.HeartRateEachSec, 260)
-		} else if i%2 == 0 {
-			m.HeartRateEachSec = append(m.HeartRateEachSec, 240)
-		} else {
-			m.HeartRateEachSec = append(m.HeartRateEachSec, 250)
-		}
-	}
-	want := 237 // The above loop should build a []int that results in a 237 fthr
-	// Run the functional thresholdpower method
-	got := m.FunctionalThresholdHeartRate(&m.HeartRateEachSec)
-	// compare against known fthr result.
-	if want != got {
 		t.Fatalf("got: %d, want: %d", got, want)
 	}
 }

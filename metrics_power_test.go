@@ -21,7 +21,6 @@ func TestNewPowerMetrics(t *testing.T) {
 	json.Unmarshal(td, &ride)
 	// manually call metrics functions in correct order to compare against.
 	w.FTP = ftp
-	w.PowerEachSec = ride.PowerEachSec
 	w.Time = w.SessionTime(&ride.PowerEachSec)
 	w.AP = w.AveragePower(&ride.PowerEachSec)
 	w.NP = w.NormalizedPower(&ride.PowerEachSec)
@@ -86,19 +85,20 @@ func TestSessionTime_Power(t *testing.T) {
 func TestFunctionalThresholdPower(t *testing.T) {
 	// create a new PowerMetrics type
 	var pm PowerMetrics
+	var pwrs []int
 	//build sample data set.
 	for i := 0; i < 2400; i++ {
 		if i%3 == 0 {
-			pm.PowerEachSec = append(pm.PowerEachSec, 260)
+			pwrs = append(pwrs, 260)
 		} else if i%2 == 0 {
-			pm.PowerEachSec = append(pm.PowerEachSec, 240)
+			pwrs = append(pwrs, 240)
 		} else {
-			pm.PowerEachSec = append(pm.PowerEachSec, 250)
+			pwrs = append(pwrs, 250)
 		}
 	}
 	want := 237 // The above loop should build a []int that results in a 237 FTP
 	// Run the functional thresholdpower method
-	got := pm.FunctionalThresholdPower(&pm.PowerEachSec)
+	got := pm.FunctionalThresholdPower(&pwrs)
 	// compare against known FTP result.
 	if want != got {
 		t.Fatalf("got: %d, want: %d", got, want)
