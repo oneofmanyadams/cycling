@@ -2,14 +2,6 @@
 A package for tracking and measuring various cycling related metrics.
 
 ### ToDo
-- Metrics functions
-    - Write tests for generic metrics functions.
-    - ~~Uncouple functions from structs?~~
-    - ~~Potentially break out generic functions to metrics_generics?~~
-    - ~~Can we actually just remove the need to hold []int at all?~~
-    - ~~Update metrics test to use ride test data instead of seperate ones.~~
-    - ~~Remove calculate method from power/hr metrics.~~
-    - ~~Finish Unit tests.~~
 - Trends metrics
     - CTL/Fitness
     - ATL/Fatigue
@@ -20,10 +12,18 @@ A package for tracking and measuring various cycling related metrics.
         - Consider user provided available hours/days of week.
         - Target improvement areas (based on performance adaptations logic).
         - Weigh zones based on performance adaptations.
-        - Use 80/20 split (or similar logic0 to suggest Zone1-2 vs Zone4+ time?
+        - Use 80/20 split (or similar logic to suggest Zone1-2 vs Zone4+ time?
     - ~~Initial ride logic~~
 - Performance adaptations logic
 - Figure out why NormalizedPower calculates 249 when all []ints are 250
+- ~~Metrics functions~~
+    - ~~Write tests for generic metrics functions.~~
+    - ~~Uncouple functions from structs?~~
+    - ~~Potentially break out generic functions to metrics_generics?~~
+    - ~~Can we actually just remove the need to hold []int at all?~~
+    - ~~Update metrics test to use ride test data instead of seperate ones.~~
+    - ~~Remove calculate method from power/hr metrics.~~
+    - ~~Finish Unit tests.~~
 - ~~Write tests for Ride methods.~~
 - ~~Tests for helper functions.~~
 - ~~Zones logic~~

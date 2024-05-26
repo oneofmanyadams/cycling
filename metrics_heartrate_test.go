@@ -2,8 +2,6 @@ package cycling
 
 import (
 	"encoding/json"
-	"fmt"
-	"math"
 	"os"
 	"testing"
 )
@@ -21,12 +19,12 @@ func TestNewHeartRateMetrics(t *testing.T) {
 	json.Unmarshal(td, &ride)
 	// Manually call metrics functions in correct order to compate against.
 	w.FTHR = fthr
-	w.Time = w.SessionTime(&ride.HeartRateEachSec)
-	w.AHR = w.AverageHeartRate(&ride.HeartRateEachSec)
-	w.NHR = w.NormalizedHeartRate(&ride.HeartRateEachSec)
-	w.VI = w.VariabilityIndex(w.NHR, w.AHR)
-	w.INF = w.IntensityFactor(w.NHR, w.FTHR)
-	w.TSS = w.TrainingStressScore(w.Time, w.NHR, w.FTHR, w.INF)
+	w.Time = RideTime(&ride.HeartRateEachSec)
+	w.AHR = Average(&ride.HeartRateEachSec)
+	w.NHR = Normalized(&ride.HeartRateEachSec)
+	w.VI = VariabilityIndex(w.NHR, w.AHR)
+	w.INF = IntensityFactor(w.NHR, w.FTHR)
+	w.TSS = TrainingStressScore(w.Time, w.NHR, w.FTHR, w.INF)
 
 	got_m = NewHeartRateMetrics(fthr, ride.HeartRateEachSec)
 	if w.Time != got_m.Time {
@@ -62,171 +60,5 @@ func TestNewHeartRateMetrics_NoFTHR(t *testing.T) {
 	got_m = NewHeartRateMetrics(0, ride.HeartRateEachSec)
 	if got_m.FTHR != 121 {
 		t.Fatalf("got %d, want %d", got_m.FTHR, 121)
-	}
-}
-
-func TestSessionTime_HeartRate(t *testing.T) {
-	type testCase struct {
-		test []int
-		want int
-	}
-	cases := []testCase{
-		{[]int{1, 2, 3, 4}, 4},
-		{[]int{}, 0},
-		{[]int{1}, 1}}
-	var m HeartRateMetrics
-	for _, tc := range cases {
-		got := m.SessionTime(&tc.test)
-		if got != tc.want {
-			t.Fatalf("got: %d, want: %d", got, tc.want)
-		}
-	}
-}
-
-func TestFunctionalThresholdHeartRate(t *testing.T) {
-	// create HeartRateMetrics type.
-	var m HeartRateMetrics
-	var hrs []int
-	// build sample data set.
-	for i := 0; i < 2400; i++ {
-		if i%3 == 0 {
-			hrs = append(hrs, 150)
-		} else if i%2 == 0 {
-			hrs = append(hrs, 130)
-		} else {
-			hrs = append(hrs, 140)
-		}
-	}
-	// Calculate FTHR
-	got := m.FunctionalThresholdHeartRate(&hrs)
-	// The above loop should build a []int that results in a 133 FTHR
-	want := 133
-	// compare against know FTHR result.
-	if got != want {
-		t.Fatalf("got: %d, want: %d", got, want)
-	}
-}
-
-func TestAverageHeartRate(t *testing.T) {
-	type testCase struct {
-		test []int
-		want int
-	}
-	tests := []testCase{
-		{[]int{1, 2, 3, 4, 5}, 3},
-		{[]int{1, 2, 3, 4, 5, 6, 7, 8}, 4},
-		{[]int{5, 2, 3, 4, 5, 6, 7, 9}, 5},
-		{[]int{}, 0}}
-	var m HeartRateMetrics
-	for _, tc := range tests {
-		got := m.AverageHeartRate(&tc.test)
-		if got != tc.want {
-			t.Fatalf("got: %d, want: %d", got, tc.want)
-		}
-	}
-}
-
-func TestNormalizedHeartRate(t *testing.T) {
-	type testCase struct {
-		min  int
-		mid  int
-		max  int
-		want int
-	}
-	tests := []testCase{
-		{min: 0, mid: 0, max: 0, want: 0},
-		{min: 120, mid: 120, max: 120, want: 119}, // this is weird...
-		{min: 100, mid: 120, max: 150, want: 122},
-		{min: 110, mid: 120, max: 130, want: 119},
-		{min: 100, mid: 140, max: 180, want: 139}}
-	var m HeartRateMetrics
-	for _, tc := range tests {
-		got := m.NormalizedHeartRate(func() *[]int {
-			var r []int
-			for i := 0; i < 1300; i++ {
-				if i%3 == 0 {
-					r = append(r, tc.max)
-				} else if i%2 == 0 {
-					r = append(r, tc.min)
-				} else {
-					r = append(r, tc.mid)
-				}
-			}
-			return &r
-		}())
-		want := tc.want
-		if got != want {
-			t.Fatalf("got: %d, want: %d", got, tc.want)
-		}
-	}
-}
-
-func TestVariabilityIndex_HeartRate(t *testing.T) {
-	type testCase struct {
-		nhr  int
-		ahr  int
-		want float64
-	}
-	tests := []testCase{
-		{nhr: 140, ahr: 140, want: 1.0},
-		{nhr: 160, ahr: 140, want: 1.14286},
-		{nhr: 140, ahr: 160, want: 0.87500},
-		{nhr: 0, ahr: 1, want: 0.00},
-		{nhr: 0, ahr: 0, want: math.NaN()},
-		{nhr: 1, ahr: 0, want: math.Inf(1)}}
-	var m HeartRateMetrics
-	for _, tc := range tests {
-		got := m.VariabilityIndex(tc.nhr, tc.ahr)
-		if fmt.Sprintf("%.5f", got) != fmt.Sprintf("%.5f", tc.want) {
-			t.Fatalf("got: %.5f, want: %.5f", got, tc.want)
-		}
-	}
-}
-
-func TestIntensityFactor_HeartRate(t *testing.T) {
-	type testCase struct {
-		nhr  int
-		fthr int
-		want float64
-	}
-	tests := []testCase{
-		{nhr: 140, fthr: 140, want: 1.0},
-		{nhr: 170, fthr: 150, want: 1.13333},
-		{nhr: 110, fthr: 150, want: 0.73333},
-		{nhr: 150, fthr: 100, want: 1.5},
-		{nhr: 0, fthr: 1, want: 0.00000},
-		{nhr: 0, fthr: 0, want: math.NaN()},
-		{nhr: 1, fthr: 0, want: math.Inf(1)}}
-	var m HeartRateMetrics
-	for _, tc := range tests {
-		got := m.IntensityFactor(tc.nhr, tc.fthr)
-		if fmt.Sprintf("%.5f", got) != fmt.Sprintf("%.5f", tc.want) {
-			t.Fatalf("got: %.5f, want: %.5f", got, tc.want)
-		}
-	}
-}
-
-func TestTrainingStressScore_HeartRate(t *testing.T) {
-	type testCase struct {
-		time int
-		nhr  int
-		fthr int
-		inf  float64
-		want float64
-	}
-	tests := []testCase{
-		{time: 3600, nhr: 150, fthr: 150, inf: 1.0, want: 100.0},
-		{time: 4800, nhr: 150, fthr: 150, inf: 1.0, want: 133.33333},
-		{time: 3600, nhr: 170, fthr: 150, inf: 1.0, want: 113.33333},
-		{time: 3600, nhr: 150, fthr: 100, inf: 1.25, want: 187.5},
-		{time: 1200, nhr: 150, fthr: 150, inf: 1.0, want: 33.33333},
-		{time: 600, nhr: 200, fthr: 150, inf: 1.8, want: 40.0},
-	}
-	var m HeartRateMetrics
-	for _, tc := range tests {
-		got := m.TrainingStressScore(tc.time, tc.nhr, tc.fthr, tc.inf)
-		if fmt.Sprintf("%.5f", got) != fmt.Sprintf("%.5f", tc.want) {
-			t.Fatalf("got: %.5f, want: %.5f", got, tc.want)
-		}
 	}
 }
