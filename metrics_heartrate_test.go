@@ -9,47 +9,59 @@ import (
 )
 
 func TestNewHeartRateMetrics(t *testing.T) {
-	var want_m HeartRateMetrics
+	var w HeartRateMetrics
 	var got_m HeartRateMetrics
+	var ride Ride
+	fthr := 121
 	// Unmarshal test json data into a new HeartRateMetrics type.
-	td, err := os.ReadFile("testdata/metrics_heartrate_sampledata.json")
+	td, err := os.ReadFile("testdata/sample_ride.json")
 	if err != nil {
 		t.Fatal(err)
 	}
-	json.Unmarshal(td, &want_m)
-	// Save testing data metrics to compare against.
-	got_m = NewHeartRateMetrics(want_m.FTHR, want_m.HeartRateEachSec)
-	if want_m.Time != got_m.Time {
-		t.Fatalf("Want %d, got %d", want_m.Time, got_m.Time)
+	json.Unmarshal(td, &ride)
+	// Manually call metrics functions in correct order to compate against.
+	w.FTHR = fthr
+	w.HeartRateEachSec = ride.HeartRateEachSec
+	w.Time = w.SessionTime(&ride.HeartRateEachSec)
+	w.AHR = w.AverageHeartRate(&ride.HeartRateEachSec)
+	w.NHR = w.NormalizedHeartRate(&ride.HeartRateEachSec)
+	w.VI = w.VariabilityIndex(w.NHR, w.AHR)
+	w.INF = w.IntensityFactor(w.NHR, w.FTHR)
+	w.TSS = w.TrainingStressScore(w.Time, w.NHR, w.FTHR, w.INF)
+
+	got_m = NewHeartRateMetrics(fthr, w.HeartRateEachSec)
+	if w.Time != got_m.Time {
+		t.Fatalf("Want %d, got %d", w.Time, got_m.Time)
 	}
-	if want_m.AHR != got_m.AHR {
-		t.Fatalf("Want %d, got %d", want_m.AHR, got_m.AHR)
+	if w.AHR != got_m.AHR {
+		t.Fatalf("Want %d, got %d", w.AHR, got_m.AHR)
 	}
-	if want_m.NHR != got_m.NHR {
-		t.Fatalf("Want %d, got %d", want_m.NHR, got_m.NHR)
+	if w.NHR != got_m.NHR {
+		t.Fatalf("Want %d, got %d", w.NHR, got_m.NHR)
 	}
-	if want_m.VI != got_m.VI {
-		t.Fatalf("Want %f, got %f", want_m.VI, got_m.VI)
+	if w.VI != got_m.VI {
+		t.Fatalf("Want %f, got %f", w.VI, got_m.VI)
 	}
-	if want_m.INF != got_m.INF {
-		t.Fatalf("Want %f, got %f", want_m.INF, got_m.INF)
+	if w.INF != got_m.INF {
+		t.Fatalf("Want %f, got %f", w.INF, got_m.INF)
 	}
-	if want_m.TSS != got_m.TSS {
-		t.Fatalf("Want %f, got %f", want_m.TSS, got_m.TSS)
+	if w.TSS != got_m.TSS {
+		t.Fatalf("Want %f, got %f", w.TSS, got_m.TSS)
 	}
 
 }
+
 func TestNewHeartRateMetrics_NoFTHR(t *testing.T) {
-	var want_m HeartRateMetrics
 	var got_m HeartRateMetrics
+	var ride Ride
 	// Unmarshal test json data into a new HeartRateMetrics type.
-	td, err := os.ReadFile("testdata/metrics_heartrate_sampledata.json")
+	td, err := os.ReadFile("testdata/sample_ride.json")
 	if err != nil {
 		t.Fatal(err)
 	}
-	json.Unmarshal(td, &want_m)
+	json.Unmarshal(td, &ride)
 	// Save testing data metrics to compare against.
-	got_m = NewHeartRateMetrics(0, want_m.HeartRateEachSec)
+	got_m = NewHeartRateMetrics(0, ride.HeartRateEachSec)
 	if got_m.FTHR != 121 {
 		t.Fatalf("got %d, want %d", got_m.FTHR, 121)
 	}
