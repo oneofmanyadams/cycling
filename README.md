@@ -5,6 +5,7 @@ A package for tracking and measuring various cycling related metrics.
 - Metrics functions
     - Uncouple functions from structs?
     - Potentially break out generic functions to metrics_generics?
+    - Write tests for generic metrics functions.
     - ~~Can we actually just remove the need to hold []int at all?~~
     - ~~Update metrics test to use ride test data instead of seperate ones.~~
     - ~~Remove calculate method from power/hr metrics.~~
